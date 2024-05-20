@@ -1,0 +1,13 @@
+aggregation-service:
+  fetching-strategy: DIRECT
+  backend:
+    base-url: http://localhost:8085
+    shipments-api-path: /shipments
+    track-api-path: /track
+    pricing-api-path: /pricing
+    connection-timeout-in-millis: 500
+    response-timeout-in-millis: 5000
+
+logging:
+  level:
+    root: info

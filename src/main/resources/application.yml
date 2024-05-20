@@ -1,0 +1,15 @@
+server.port: 8080
+
+aggregation-service:
+  fetching-strategy: ${AGGREGATION_SERVICE_FETCHING_STRATEGY:SCHEDULED_QUEUED}
+  backend:
+    base-url: ${BACKEND_SERVICE:http://localhost:8080}
+    shipments-api-path: /shipments
+    track-api-path: /track
+    pricing-api-path: /pricing
+    connection-timeout-in-millis: 500
+    response-timeout-in-millis: 5000
+
+logging:
+  level:
+    root: info

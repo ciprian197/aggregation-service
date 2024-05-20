@@ -1,0 +1,14 @@
+Taking into account that the service is dependent on a quite slow backend service (5 second SLA) I decided to use Spring WebFlux (while waiting for responses from the backend service, the aggregation service's resources won't be blocked).
+
+As a general rule I followed a layered architecture in order to keep the application code clean and the responsibilities for data manipulation separate.
+From top to bottom these are the layers Presentation(Controller + Exception Handler) -> Business (Services + Strategies) -> Data Access Layer (Backend Client)
+
+Taking into account the requirements, I decided to have a strategy class for each requirement:
+  • DirectResourceFetchingStrategy - delegates the call directly to the client to perform the call
+  • QueuedResourceFetchingStrategy - keeps the calls into a queue until a defined (5) number of resources is requested from the backend service
+  • ScheduledQueuedResourceFetchingStrategy - keeps the calls into a queue until a defined (5) number of resources is requested from the backend service or a defined timeout has passed (5 seconds)
+
+In order to implement the queue behaviour I chose to use a Flux, taking into account its flexibility with `buffer` and `bufferTimeout` non-blocking methods.
+
+In order to avoid making multiple calls for the same backend resource at a time, for the Queued approach I introduced `elementsPending` set to keep track of the elements that are already in the queue or processing.
+
